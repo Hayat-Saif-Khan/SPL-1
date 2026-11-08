@@ -1,6 +1,9 @@
-
+#include "BuildingGrid.hpp"
+#include "GridRenderer.hpp"
+#include "MapEditor.hpp"
 #include <iostream>
 #include <limits>
+#include <exception>
 
 // Displays the AERIS application banner.
 void displayBanner() {
@@ -22,6 +25,26 @@ void displayMenu() {
     std::cout << "0. Exit\n";
     std::cout << "----------------------------------------\n";
 }
+
+
+void createManualBuildingMap() {
+
+    try {
+        aeris::BuildingGrid grid =
+            aeris::createMapFromInput(std::cin, std::cout);
+
+        std::cout << "\nYOUR BUILDING MAP\n";
+        std::cout << "-----------------\n";
+
+        aeris::renderGrid(grid, std::cout);
+
+    } catch (const std::exception& error) {
+
+        std::cout << "\nMap creation stopped: "
+                  << error.what() << '\n';
+    }
+}
+
 
 int main() {
     int choice = -1;
@@ -50,8 +73,8 @@ int main() {
                 return 0;
 
             case 1:
-                std::cout << "\nBuilding Map module is not implemented yet.\n";
-                break;
+                 createManualBuildingMap();
+                 break;
 
             case 2:
                 std::cout << "\nSimulation Configuration is not implemented yet.\n";
