@@ -14,6 +14,7 @@ add_executable(aeris
     src/BuildingGrid.cpp
     src/GridRenderer.cpp
     src/MapEditor.cpp
+    src/MapValidator.cpp
 )
 
 target_include_directories(aeris PRIVATE
@@ -51,6 +52,21 @@ target_include_directories(test_map_editor PRIVATE
 add_test(
     NAME MapEditorTests
     COMMAND test_map_editor
+)
+
+add_executable(test_map_validator
+    tests/test_map_validator.cpp
+    src/BuildingGrid.cpp
+    src/MapValidator.cpp
+)
+
+target_include_directories(test_map_validator PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+
+add_test(
+    NAME MapValidatorTests
+    COMMAND test_map_validator
 )
 
 endif()
