@@ -16,6 +16,7 @@ add_executable(aeris
     src/MapEditor.cpp
     src/MapValidator.cpp
     src/OccupancyGrid.cpp
+    src/MapAnalyzer.cpp
 )
 
 target_include_directories(aeris PRIVATE
@@ -83,6 +84,21 @@ target_include_directories(test_occupancy_grid PRIVATE
 add_test(
     NAME OccupancyGridTests
     COMMAND test_occupancy_grid
+)
+
+add_executable(test_map_analyzer
+    tests/test_map_analyzer.cpp
+    src/BuildingGrid.cpp
+    src/MapAnalyzer.cpp
+)
+
+target_include_directories(test_map_analyzer PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+
+add_test(
+    NAME MapAnalyzerTests
+    COMMAND test_map_analyzer
 )
 
 endif()
