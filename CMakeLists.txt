@@ -18,6 +18,7 @@ add_executable(aeris
     src/OccupancyGrid.cpp
     src/MapAnalyzer.cpp
     src/OccupancyRenderer.cpp
+    src/AgentManager.cpp
 )
 
 target_include_directories(aeris PRIVATE
@@ -129,6 +130,22 @@ target_include_directories(test_agent_model PRIVATE
 add_test(
     NAME AgentModelTests
     COMMAND test_agent_model
+)
+
+add_executable(test_agent_manager
+    tests/test_agent_manager.cpp
+    src/AgentManager.cpp
+    src/OccupancyGrid.cpp
+    src/BuildingGrid.cpp
+)
+
+target_include_directories(test_agent_manager PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+
+add_test(
+    NAME AgentManagerTests
+    COMMAND test_agent_manager
 )
 
 endif()
