@@ -118,4 +118,17 @@ add_test(
     COMMAND test_occupancy_renderer
 )
 
+add_executable(test_agent_model
+    tests/test_agent_model.cpp
+)
+
+target_include_directories(test_agent_model PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+
+add_test(
+    NAME AgentModelTests
+    COMMAND test_agent_model
+)
+
 endif()
