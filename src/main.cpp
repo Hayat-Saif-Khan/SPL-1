@@ -3,6 +3,8 @@
 #include "MapEditor.hpp"
 #include "MapValidator.hpp"
 #include "MapAnalyzer.hpp"
+#include "OccupancyGrid.hpp"
+#include "OccupancyRenderer.hpp"
 #include <iomanip>
 #include <iostream>
 #include <limits>
@@ -30,6 +32,7 @@ void displayMenu() {
 }
 
 
+
 void createManualBuildingMap() {
 
     try {
@@ -38,7 +41,7 @@ void createManualBuildingMap() {
         aeris::BuildingGrid grid =
             aeris::createMapFromInput(std::cin, std::cout);
 
-        // Step 2: Display the building map.
+        // Step 2: Display the original building map.
         std::cout << "\nYOUR BUILDING MAP\n";
         std::cout << "-----------------\n";
 
@@ -68,53 +71,65 @@ void createManualBuildingMap() {
             }
         }
 
+        // Step 5: Analyze the building map.
+        const aeris::MapStatistics statistics =
+            aeris::analyzeMap(grid);
 
-// Step 5: Analyze the building map.
-const aeris::MapStatistics statistics =
-    aeris::analyzeMap(grid);
+        // Step 6: Display building statistics.
+        std::cout << "\n========== BUILDING MAP ANALYSIS ==========\n";
 
-// Step 6: Display building statistics.
-std::cout << "\n========== BUILDING MAP ANALYSIS ==========\n";
+        std::cout << "Grid Dimensions:       "
+                  << grid.rowCount() << " x "
+                  << grid.columnCount() << '\n';
 
-std::cout << "Grid Dimensions:       "
-          << grid.rowCount() << " x "
-          << grid.columnCount() << '\n';
+        std::cout << "Total Cells:           "
+                  << statistics.totalCells << '\n';
 
-std::cout << "Total Cells:           "
-          << statistics.totalCells << '\n';
+        std::cout << "\nCell Distribution:\n";
 
-std::cout << "\nCell Distribution:\n";
+        std::cout << "Wall Cells:            "
+                  << statistics.wallCount << '\n';
 
-std::cout << "Wall Cells:            "
-          << statistics.wallCount << '\n';
+        std::cout << "Floor Cells:           "
+                  << statistics.floorCount << '\n';
 
-std::cout << "Floor Cells:           "
-          << statistics.floorCount << '\n';
+        std::cout << "Door Cells:            "
+                  << statistics.doorCount << '\n';
 
-std::cout << "Door Cells:            "
-          << statistics.doorCount << '\n';
+        std::cout << "Exit Cells:            "
+                  << statistics.exitCount << '\n';
 
-std::cout << "Exit Cells:            "
-          << statistics.exitCount << '\n';
+        std::cout << "\nWalkable Cells:        "
+                  << statistics.walkableCount << '\n';
 
-std::cout << "\nWalkable Cells:        "
-          << statistics.walkableCount << '\n';
+        // Display blocked percentage with two decimal places.
+        const auto oldFlags = std::cout.flags();
+        const auto oldPrecision = std::cout.precision();
 
-const auto oldFlags = std::cout.flags();
-const auto oldPrecision = std::cout.precision();
+        std::cout << std::fixed << std::setprecision(2);
 
-std::cout << std::fixed << std::setprecision(2);
+        std::cout << "Blocked Percentage:   "
+                  << statistics.blockedPercentage << "%\n";
 
-std::cout << "Blocked Percentage:   "
-          << statistics.blockedPercentage << "%\n";
+        // Restore previous output formatting.
+        std::cout.flags(oldFlags);
+        std::cout.precision(oldPrecision);
 
-std::cout.flags(oldFlags);
-std::cout.precision(oldPrecision);
+        std::cout << "\n============================================\n";
 
-std::cout << "\n============================================\n";
+        // Step 7: Generate the occupancy grid.
+        const aeris::OccupancyGrid occupancyGrid(grid);
 
+        // Step 8: Display the occupancy grid.
+        std::cout << "\n========== OCCUPANCY GRID ==========\n";
 
-        std::cout << "\n====================================\n";
+        aeris::renderOccupancyGrid(occupancyGrid, std::cout);
+
+        std::cout << "\nLegend:\n";
+        std::cout << "# = Blocked\n";
+        std::cout << ". = Free\n";
+
+        std::cout << "====================================\n";
 
     } catch (const std::exception& error) {
 
