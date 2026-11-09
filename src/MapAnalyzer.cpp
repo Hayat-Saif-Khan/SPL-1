@@ -51,7 +51,7 @@ MapStatistics analyzeMap(const BuildingGrid& grid) {
         statistics.exitCount;
 
     // Calculate the percentage of blocked cells.
-    
+
     if (statistics.totalCells > 0) {
 
         statistics.blockedPercentage =
