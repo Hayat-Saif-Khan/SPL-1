@@ -1,6 +1,7 @@
 #include "BuildingGrid.hpp"
 #include "GridRenderer.hpp"
 #include "MapEditor.hpp"
+#include "MapValidator.hpp"
 #include <iostream>
 #include <limits>
 #include <exception>
@@ -30,13 +31,42 @@ void displayMenu() {
 void createManualBuildingMap() {
 
     try {
+
+        // Step 1: Create the building map.
         aeris::BuildingGrid grid =
             aeris::createMapFromInput(std::cin, std::cout);
 
+        // Step 2: Display the building map.
         std::cout << "\nYOUR BUILDING MAP\n";
         std::cout << "-----------------\n";
 
         aeris::renderGrid(grid, std::cout);
+
+        // Step 3: Validate the map using BFS.
+        std::cout << "\n========== MAP VALIDATION ==========\n";
+
+        const aeris::MapValidationResult result =
+            aeris::validateMap(grid);
+
+        // Step 4: Display validation results.
+        if (result.isValid()) {
+
+            std::cout << "\nMAP VALIDATION: PASSED\n";
+
+            std::cout
+                << "All walkable cells can reach at least one exit.\n";
+
+        } else {
+
+            std::cout << "\nMAP VALIDATION: FAILED\n";
+            std::cout << "\nProblems found:\n";
+
+            for (const auto& error : result.errors) {
+                std::cout << "- " << error << '\n';
+            }
+        }
+
+        std::cout << "\n====================================\n";
 
     } catch (const std::exception& error) {
 
@@ -44,6 +74,7 @@ void createManualBuildingMap() {
                   << error.what() << '\n';
     }
 }
+
 
 
 int main() {
