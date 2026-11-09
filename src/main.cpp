@@ -2,6 +2,8 @@
 #include "GridRenderer.hpp"
 #include "MapEditor.hpp"
 #include "MapValidator.hpp"
+#include "MapAnalyzer.hpp"
+#include <iomanip>
 #include <iostream>
 #include <limits>
 #include <exception>
@@ -65,6 +67,52 @@ void createManualBuildingMap() {
                 std::cout << "- " << error << '\n';
             }
         }
+
+
+// Step 5: Analyze the building map.
+const aeris::MapStatistics statistics =
+    aeris::analyzeMap(grid);
+
+// Step 6: Display building statistics.
+std::cout << "\n========== BUILDING MAP ANALYSIS ==========\n";
+
+std::cout << "Grid Dimensions:       "
+          << grid.rowCount() << " x "
+          << grid.columnCount() << '\n';
+
+std::cout << "Total Cells:           "
+          << statistics.totalCells << '\n';
+
+std::cout << "\nCell Distribution:\n";
+
+std::cout << "Wall Cells:            "
+          << statistics.wallCount << '\n';
+
+std::cout << "Floor Cells:           "
+          << statistics.floorCount << '\n';
+
+std::cout << "Door Cells:            "
+          << statistics.doorCount << '\n';
+
+std::cout << "Exit Cells:            "
+          << statistics.exitCount << '\n';
+
+std::cout << "\nWalkable Cells:        "
+          << statistics.walkableCount << '\n';
+
+const auto oldFlags = std::cout.flags();
+const auto oldPrecision = std::cout.precision();
+
+std::cout << std::fixed << std::setprecision(2);
+
+std::cout << "Blocked Percentage:   "
+          << statistics.blockedPercentage << "%\n";
+
+std::cout.flags(oldFlags);
+std::cout.precision(oldPrecision);
+
+std::cout << "\n============================================\n";
+
 
         std::cout << "\n====================================\n";
 
