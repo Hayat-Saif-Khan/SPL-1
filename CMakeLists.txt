@@ -19,6 +19,7 @@ add_executable(aeris
     src/MapAnalyzer.cpp
     src/OccupancyRenderer.cpp
     src/AgentManager.cpp
+    src/Pathfinder.cpp
 )
 
 target_include_directories(aeris PRIVATE
@@ -146,6 +147,21 @@ target_include_directories(test_agent_manager PRIVATE
 add_test(
     NAME AgentManagerTests
     COMMAND test_agent_manager
+)
+
+add_executable(test_pathfinder
+    tests/test_pathfinder.cpp
+    src/Pathfinder.cpp
+    src/BuildingGrid.cpp
+)
+
+target_include_directories(test_pathfinder PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+
+add_test(
+    NAME PathfinderTests
+    COMMAND test_pathfinder
 )
 
 endif()
