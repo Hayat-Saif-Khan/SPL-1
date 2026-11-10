@@ -21,6 +21,7 @@ add_executable(aeris
     src/AgentManager.cpp
     src/Pathfinder.cpp
     src/EvacuationSimulation.cpp
+    src/SimulationRenderer.cpp
 )
 
 target_include_directories(aeris PRIVATE
@@ -183,5 +184,22 @@ add_test(
     NAME EvacuationSimulationTests
     COMMAND test_evacuation_simulation
 )
+
+add_executable(test_simulation_renderer
+        tests/test_simulation_renderer.cpp
+        src/SimulationRenderer.cpp
+        src/AgentManager.cpp
+        src/OccupancyGrid.cpp
+        src/BuildingGrid.cpp
+    )
+
+    target_include_directories(test_simulation_renderer PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+    )
+
+    add_test(
+        NAME SimulationRendererTests
+        COMMAND test_simulation_renderer
+    )
 
 endif()
