@@ -111,11 +111,21 @@ BuildingGrid createMapFromInput(
     // Create the grid.
     BuildingGrid grid(rows, columns);
 
-    output << "\nEnter each row using:\n";
+    // Explain the map input format.
+    output << "\nEnter the building map below.\n";
+    output << "Type manually or paste the entire map.\n";
+
+    output << "Expected: " << rows
+           << " rows, each containing "
+           << columns << " characters.\n\n";
+
+    output << "Symbols:\n";
     output << "# = Wall\n";
     output << ". = Floor\n";
     output << "D = Door\n";
-    output << "E = Exit\n\n";
+    output << "E = Exit\n";
+
+    output << "\nMap input:\n";
 
     // Read and validate every row.
     for (std::size_t row = 0; row < rows; ++row) {
@@ -123,8 +133,6 @@ BuildingGrid createMapFromInput(
         std::string rowText;
 
         while (true) {
-
-            output << "Row " << row + 1 << ": ";
 
             if (!(input >> rowText)) {
                 throw std::runtime_error(
@@ -134,8 +142,9 @@ BuildingGrid createMapFromInput(
 
             // Check row length.
             if (rowText.size() != columns) {
-                output << "Invalid row length. Expected "
-                       << columns << " characters.\n";
+                output << "Invalid row length in row " << row + 1
+                       << ". Expected " << columns
+                       << " characters. Please re-enter the row.\n";
                 continue;
             }
 
@@ -152,7 +161,8 @@ BuildingGrid createMapFromInput(
             }
 
             if (!valid) {
-                output << "Invalid symbol. Use only # . D E.\n";
+                output << "Invalid symbol in row " << row + 1
+                       << ". Use only # . D E. Please re-enter the row.\n";
                 continue;
             }
 
